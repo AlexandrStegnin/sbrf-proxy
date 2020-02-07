@@ -28,15 +28,11 @@ public class Proxy {
                 proxyPort = Integer.parseInt(args[2]);
                 maxConnections = Integer.parseInt(args[3]);
             } catch (NumberFormatException e) {
-                log.severe("Некорректные входные параметры! Проверьте правильность ввода:\n" +
-                        "<host> - строка\n" +
-                        "<api port> - число\n" +
-                        "<proxy port> - число\n" +
-                        "<max connections> - число");
+                log.severe(WRONG_ARGUMENTS_EXCEPTION);
             }
         }
         try {
-            log.info("Стартует прокси для " + host + ":" + apiPort + " на порту " + proxyPort);
+            log.info("Стартует прокси для ".concat(host).concat(":").concat(String.valueOf(apiPort)).concat(" на порту ").concat(String.valueOf(proxyPort)));
             ServerSocket server = new ServerSocket(proxyPort, maxConnections);
             server.setSoTimeout(DEFAULT_TIMEOUT);
             Socket client;
@@ -44,7 +40,7 @@ public class Proxy {
                 new ThreadProxy(client, host, apiPort);
             }
         } catch (InterruptedIOException e) {
-            log.severe(String.format("Сервер остановлен по таймауту [%d] сек", DEFAULT_TIMEOUT / 1000));
+            log.severe("Сервер остановлен по таймауту ".concat(String.valueOf((DEFAULT_TIMEOUT / 1000))));
         } catch (IOException e) {
             log.severe(e.getLocalizedMessage());
         }

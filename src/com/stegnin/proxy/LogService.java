@@ -1,12 +1,13 @@
 package com.stegnin.proxy;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
+
+import static com.stegnin.proxy.util.Constants.*;
 
 /**
  * @author Alexandr Stegnin
@@ -19,7 +20,7 @@ public class LogService {
     private final Path filePath;
 
     public LogService() {
-        this.filePath = Paths.get(".." + File.separator + "proxyLog.log");
+        this.filePath = Paths.get(PATH_TO_LOG_FILE);
     }
 
     /**
@@ -30,9 +31,9 @@ public class LogService {
         try(FileWriter fileWriter = new FileWriter(filePath.toFile(), true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             bufferedWriter.write(message);
-            logger.info(String.format("Сообщение успешно записано в лог файл: %n%s", message));
+            logger.info(WRITE_LOG_FILE_SUCCESS);
         } catch (IOException e) {
-            logger.severe(String.format("При записи сообщения в лог файл возникла ошибка: %n%s", e.getLocalizedMessage()));
+            logger.severe(WRITE_LOG_FILE_FAILED.concat(e.getLocalizedMessage()));
         }
     }
 
