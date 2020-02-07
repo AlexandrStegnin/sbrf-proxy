@@ -1,11 +1,11 @@
 package com.stegnin.proxy;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.logging.Logger;
 
 /**
@@ -27,11 +27,9 @@ public class LogService {
      * @param message - сообщение, которое надо записать
      */
     public void log(String message) {
-        try {
-            if (!filePath.toFile().exists()) {
-                Files.createFile(filePath);
-            }
-            Files.write(filePath, message.getBytes(), StandardOpenOption.APPEND);
+        try(FileWriter fileWriter = new FileWriter(filePath.toFile(), true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(message);
             logger.info(String.format("Сообщение успешно записано в лог файл: %n%s", message));
         } catch (IOException e) {
             logger.severe(String.format("При записи сообщения в лог файл возникла ошибка: %n%s", e.getLocalizedMessage()));
